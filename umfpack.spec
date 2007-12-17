@@ -16,7 +16,6 @@ URL:		http://www.cise.ufl.edu/research/sparse/umfpack/
 Source0:	http://www.cise.ufl.edu/research/sparse/umfpack/%{NAME}-%{version}.tar.gz
 Source1:	http://www.cise.ufl.edu/research/sparse/ufconfig/UFconfig-3.0.0.tar.gz
 BuildRequires:	amd-devel >= 1.2-2mdk
-BuildRoot:	%{_tmppath}/%{name}-%{version}
 
 %description
 UMFPACK is a set of routines for solving unsymmetric sparse linear systems,
