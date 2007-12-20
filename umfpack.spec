@@ -1,6 +1,6 @@
 %define name	umfpack
 %define NAME	UMFPACK
-%define version	5.1.0
+%define version	5.2.0
 %define release	%mkrel 1
 %define major	%{version}
 %define libname	%mklibname %{name} %{major}
