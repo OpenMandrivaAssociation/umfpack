@@ -1,48 +1,66 @@
-%define name	umfpack
-%define NAME	UMFPACK
-%define version	5.2.0
-%define release	%mkrel 1
-%define major	%{version}
-%define libname	%mklibname %{name} %{major}
+%define epoch		0
+
+%define name		umfpack
+%define NAME		UMFPACK
+%define version		5.2.0
+%define release		%mkrel 2
+%define major		%{version}
+%define libname		%mklibname %{name} %{major}
 %define develname	%mklibname %{name} -d
 
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
-Summary:	Approximate minimum degree ordering
+Summary:	Routines for solving unsymmetric sparse linear systems
 Group:		System/Libraries
-License:	LGPL
+License:	GPL
 URL:		http://www.cise.ufl.edu/research/sparse/umfpack/
 Source0:	http://www.cise.ufl.edu/research/sparse/umfpack/%{NAME}-%{version}.tar.gz
-Source1:	http://www.cise.ufl.edu/research/sparse/ufconfig/UFconfig-3.0.0.tar.gz
-BuildRequires:	amd-devel >= 1.2-2mdk
+Source1:	http://www.cise.ufl.edu/research/sparse/ufconfig/UFconfig-3.1.0.tar.gz
+BuildRequires:	amd-devel >= 2.0.0
+BuildRequires:	blas-devel
+BuildRoot:	%{_tmppath}/%{name}-%{version}
 
 %description
-UMFPACK is a set of routines for solving unsymmetric sparse linear systems,
-Ax=b, using the Unsymmetric MultiFrontal method. Written in ANSI/ISO C, with a
-MATLAB (Version 6.0 and later) interface. Appears as a built-in routine (for
-lu, backslash, and forward slash) in MATLAB.  Includes a MATLAB interface, a
-C-callable interfance, and a Fortran-callable interface. Note that "UMFPACK" is
-pronounced in two syllables, "Umph Pack". It is not "You Em Ef Pack".
+UMFPACK provides a set of routines for solving unsymmetric sparse
+linear systems Ax=b using the Unsymmetric MultiFrontal method. It is
+written in ANSI/ISO C. Note that "UMFPACK" is pronounced in two
+syllables, "Umph Pack"; it is not "You Em Ef Pack".
 
 %package -n %{libname}
-Summary:	Main library for %{name}
+Summary:	Library of routines for solving unsymmetric sparse linear systems
 Group:		System/Libraries
+Provides:	%{libname} = %{epoch}:%{version}-%{release}
+Obsoletes:	%mklibname %name 4.6
+Obsoletes:	%mklibname %name 5.1.0
+Obsoletes:	%mklibname %name 5
 
 %description -n %{libname}
+UMFPACK provides a set of routines for solving unsymmetric sparse
+linear systems Ax=b using the Unsymmetric MultiFrontal method. It is
+written in ANSI/ISO C. Note that "UMFPACK" is pronounced in two
+syllables, "Umph Pack"; it is not "You Em Ef Pack".
+
 This package contains the library needed to run programs dynamically
-linked with %{name}.
+linked against %{NAME}.
 
 %package -n %{develname}
-Summary:	Headers for developing programs that will use %{name}
-Group:		Development/Other
-Requires:	%{libname} = %{version}-%{release}
-Provides:	%{name}-devel = %{version}-%{release}
-Obsoletes:  %{mklibname %name 4.6 -d}
+Summary:	C routines for solving unsymmetric sparse linear systems
+Group:		Development/C
+Requires:	suitesparse-common-devel >= 3.0.0
+Requires:	%{libname} = %{epoch}:%{version}-%{release}
+Provides:	%{name}-devel = %{epoch}:%{version}-%{release}
+Obsoletes: 	%mklibname %name 4.6 -d
+Obsoletes:	%mklibname %name 5 -d
 
 %description -n %{develname}
-This package contains the headers that programmers will need to develop
-applications which will use %{name}.
+UMFPACK provides a set of routines for solving unsymmetric sparse
+linear systems Ax=b using the Unsymmetric MultiFrontal method. It is
+written in ANSI/ISO C. Note that "UMFPACK" is pronounced in two
+syllables, "Umph Pack"; it is not "You Em Ef Pack".
+
+This package contains the files needed to develop applications which
+use %{name}.
 
 %prep
 %setup -q -c 
@@ -50,30 +68,34 @@ applications which will use %{name}.
 %setup -q -D -T -n %{name}-%{version}/%{NAME}
 
 %build
-cd Lib
-    %{__make} -f GNUmakefile CFLAGS="$RPM_OPT_FLAGS -fPIC" INC=""
-    gcc -shared -Wl,-soname,lib%{name}.so.%{major} -o ../Lib/lib%{name}.so.%{version} -lamd `ls *.o`
-cd ..
-cd Doc
-    %{__make}
-cd ..
+pushd Lib
+    %make -f GNUmakefile CC=%__cc CFLAGS="$RPM_OPT_FLAGS -fPIC -I/usr/include/suitesparse" INC=
+    %__cc -shared -Wl,-soname,lib%{name}.so.%{major} -o lib%{name}.so.%{version} -lamd -lblas -lm *.o
+popd
 
 %install
-rm -rf %{buildroot}
+%__rm -rf %{buildroot}
 
-install -d -m 755 %{buildroot}%{_libdir}
-install -m 755 Lib/lib%{name}.so.%{version} %{buildroot}%{_libdir}
-install -m 644 Lib/lib%{name}.a %{buildroot}%{_libdir}
-(cd %{buildroot}%{_libdir} && ln -s lib%{name}.so.%{version} lib%{name}.so)
+%__install -d -m 755 %{buildroot}%{_libdir} 
+%__install -d -m 755 %{buildroot}%{_includedir}/suitesparse 
 
-install -d -m 755 %{buildroot}%{_includedir}
-install -m 644 Include/*.h %{buildroot}%{_includedir}
+for f in Lib/*.so*; do
+    %__install -m 755 $f %{buildroot}%{_libdir}/`basename $f`
+done
+for f in Lib/*.a; do
+    %__install -m 644 $f %{buildroot}%{_libdir}/`basename $f`
+done
+for f in Include/*.h; do
+    %__install -m 644 $f %{buildroot}%{_includedir}/suitesparse/`basename $f`
+done
 
-install -d -m 755 %{buildroot}%{_docdir}/%{name}
-install -m 644 README.txt Doc/*.pdf %{buildroot}%{_docdir}/%{name}
+%__ln_s lib%{name}.so.%{version} %{buildroot}%{_libdir}/lib%{name}.so
+
+%__install -d -m 755 %{buildroot}%{_docdir}/%{name}
+%__install -m 644 README.txt Doc/*.txt Doc/*.pdf Doc/ChangeLog Doc/License %{buildroot}%{_docdir}/%{name}
 
 %clean
-rm -rf %{buildroot}
+%__rm -rf %{buildroot}
 
 %post -n %{libname} -p /sbin/ldconfig
 
@@ -89,5 +111,3 @@ rm -rf %{buildroot}
 %{_includedir}/*
 %{_libdir}/*.so
 %{_libdir}/*.a
-
-
