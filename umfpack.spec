@@ -3,7 +3,7 @@
 %define name		umfpack
 %define NAME		UMFPACK
 %define version		5.2.0
-%define release		%mkrel 2
+%define release		%mkrel 3
 %define major		%{version}
 %define libname		%mklibname %{name} %{major}
 %define develname	%mklibname %{name} -d
@@ -52,6 +52,7 @@ Requires:	%{libname} = %{epoch}:%{version}-%{release}
 Provides:	%{name}-devel = %{epoch}:%{version}-%{release}
 Obsoletes: 	%mklibname %name 4.6 -d
 Obsoletes:	%mklibname %name 5 -d
+Obsoletes:	%mklibname %name 5 -d -s
 
 %description -n %{develname}
 UMFPACK provides a set of routines for solving unsymmetric sparse
