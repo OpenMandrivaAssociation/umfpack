@@ -3,7 +3,7 @@
 %define name		umfpack
 %define NAME		UMFPACK
 %define version		5.2.0
-%define release		%mkrel 4
+%define release		%mkrel 5
 %define major		%{version}
 %define libname		%mklibname %{name} %{major}
 %define develname	%mklibname %{name} -d
@@ -17,7 +17,12 @@ License:	GPL
 URL:		http://www.cise.ufl.edu/research/sparse/umfpack/
 Source0:	http://www.cise.ufl.edu/research/sparse/umfpack/%{NAME}-%{version}.tar.gz
 Source1:	http://www.cise.ufl.edu/research/sparse/ufconfig/UFconfig-3.1.0.tar.gz
+# Explicitly specify amd version because of multiple amd packages in < 2008.1
+%if %mdkversion < 200810
+BuildRequires:  amd-devel = 2.2.0
+%else
 BuildRequires:	amd-devel >= 2.0.0
+%endif
 BuildRequires:	blas-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}
 
