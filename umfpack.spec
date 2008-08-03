@@ -3,7 +3,7 @@
 %define name		umfpack
 %define NAME		UMFPACK
 %define version		5.2.0
-%define release		%mkrel 7
+%define release		%mkrel 8
 %define major		%{version}
 %define libname		%mklibname %{name} %{major}
 %define develname	%mklibname %{name} -d
