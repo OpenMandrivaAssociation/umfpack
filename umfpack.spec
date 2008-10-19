@@ -3,7 +3,7 @@
 %define name		umfpack
 %define NAME		UMFPACK
 %define version		5.2.0
-%define release		%mkrel 8
+%define release		%mkrel 9
 %define major		%{version}
 %define libname		%mklibname %{name} %{major}
 %define develname	%mklibname %{name} -d
@@ -13,7 +13,7 @@ Version:	%{version}
 Release:	%{release}
 Summary:	Routines for solving unsymmetric sparse linear systems
 Group:		System/Libraries
-License:	GPL
+License:	GPLv2+
 URL:		http://www.cise.ufl.edu/research/sparse/umfpack/
 Source0:	http://www.cise.ufl.edu/research/sparse/umfpack/%{NAME}-%{version}.tar.gz
 Source1:	http://www.cise.ufl.edu/research/sparse/ufconfig/UFconfig-3.1.0.tar.gz
