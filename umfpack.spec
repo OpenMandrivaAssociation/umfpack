@@ -17,12 +17,7 @@ License:	GPLv2+
 URL:		http://www.cise.ufl.edu/research/sparse/umfpack/
 Source0:	http://www.cise.ufl.edu/research/sparse/umfpack/%{NAME}-%{version}.tar.gz
 Source1:	http://www.cise.ufl.edu/research/sparse/ufconfig/UFconfig-3.1.0.tar.gz
-# Explicitly specify amd version because of multiple amd packages in < 2008.1
-%if %mdkversion < 200810
-BuildRequires:  amd-devel = 2.2.0
-%else
-BuildRequires:	amd-devel >= 2.0.0
-%endif
+BuildRequires:  amd-devel >= 2.2.0
 BuildRequires:	blas-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}
 
