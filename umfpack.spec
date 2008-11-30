@@ -45,6 +45,7 @@ Summary:	C routines for solving unsymmetric sparse linear systems
 Group:		Development/C
 Requires:	%{libname} = %{epoch}:%{version}-%{release}
 Provides:	%{name}-devel = %{epoch}:%{version}-%{release}
+Requires:	blas-devel
 Obsoletes:	%mklibname %{name} 4.6 -d
 Obsoletes:	%mklibname %{name} 5 -d
 Obsoletes:	%mklibname %{name} 5 -d -s
