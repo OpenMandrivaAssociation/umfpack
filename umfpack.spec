@@ -1,24 +1,20 @@
-%define epoch		0
+%define NAME UMFPACK
+%define major %{version}
+%define libname %mklibname %{name} %{major}
+%define develname %mklibname %{name} -d
 
-%define name		umfpack
-%define NAME		UMFPACK
-%define version		5.2.0
-%define release		%mkrel 9
-%define major		%{version}
-%define libname		%mklibname %{name} %{major}
-%define develname	%mklibname %{name} -d
-
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
 Summary:	Routines for solving unsymmetric sparse linear systems
+Name:		%{name}
+Version:	5.2.0
+Release:	%mkrel 10
+Epoch:		0
 Group:		System/Libraries
 License:	GPLv2+
 URL:		http://www.cise.ufl.edu/research/sparse/umfpack/
 Source0:	http://www.cise.ufl.edu/research/sparse/umfpack/%{NAME}-%{version}.tar.gz
 Source1:	http://www.cise.ufl.edu/research/sparse/ufconfig/UFconfig-3.1.0.tar.gz
 # Explicitly specify amd version because of multiple amd packages:
-BuildRequires:  amd-devel = 2.2.0
+BuildRequires:	amd-devel = 2.2.0
 BuildRequires:	blas-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}
 
@@ -49,7 +45,7 @@ Summary:	C routines for solving unsymmetric sparse linear systems
 Group:		Development/C
 Requires:	%{libname} = %{epoch}:%{version}-%{release}
 Provides:	%{name}-devel = %{epoch}:%{version}-%{release}
-Obsoletes: 	%mklibname %{name} 4.6 -d
+Obsoletes:	%mklibname %{name} 4.6 -d
 Obsoletes:	%mklibname %{name} 5 -d
 Obsoletes:	%mklibname %{name} 5 -d -s
 
@@ -69,7 +65,7 @@ use %{name}.
 
 %build
 pushd Lib
-    %make -f GNUmakefile CC=%__cc CFLAGS="$RPM_OPT_FLAGS -fPIC -I/usr/include/suitesparse" INC=
+    %make -f GNUmakefile CC=%__cc CFLAGS="%{optflags} -fPIC -I/usr/include/suitesparse" INC=
     %__cc -shared -Wl,-soname,lib%{name}.so.%{major} -o lib%{name}.so.%{version} -lamd -lblas -lm *.o
 popd
 
