@@ -4,7 +4,7 @@
 %define develname %mklibname %{name} -d
 
 Summary:	Routines for solving unsymmetric sparse linear systems
-Name:		%{name}
+Name:		umfpack
 Version:	5.2.0
 Release:	%mkrel 10
 Epoch:		0
