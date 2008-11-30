@@ -32,6 +32,8 @@ syllables, "Umph Pack"; it is not "You Em Ef Pack".
 Summary:	Library of routines for solving unsymmetric sparse linear systems
 Group:		System/Libraries
 Provides:	%{libname} = %{epoch}:%{version}-%{release}
+# (tpg) kill suitesparse umfpack library
+Obsoletes:	%{mklibname umfpack 5}
 
 %description -n %{libname}
 UMFPACK provides a set of routines for solving unsymmetric sparse
@@ -45,12 +47,11 @@ linked against %{NAME}.
 %package -n %{develname}
 Summary:	C routines for solving unsymmetric sparse linear systems
 Group:		Development/C
-Requires:	suitesparse-common-devel >= 3.0.0
 Requires:	%{libname} = %{epoch}:%{version}-%{release}
 Provides:	%{name}-devel = %{epoch}:%{version}-%{release}
-Obsoletes: 	%mklibname %name 4.6 -d
-Obsoletes:	%mklibname %name 5 -d
-Obsoletes:	%mklibname %name 5 -d -s
+Obsoletes: 	%mklibname %{name} 4.6 -d
+Obsoletes:	%mklibname %{name} 5 -d
+Obsoletes:	%mklibname %{name} 5 -d -s
 
 %description -n %{develname}
 UMFPACK provides a set of routines for solving unsymmetric sparse
