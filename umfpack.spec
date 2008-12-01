@@ -6,7 +6,7 @@
 Summary:	Routines for solving unsymmetric sparse linear systems
 Name:		umfpack
 Version:	5.2.0
-Release:	%mkrel 10
+Release:	%mkrel 11
 Epoch:		0
 Group:		System/Libraries
 License:	GPLv2+
@@ -16,6 +16,7 @@ Source1:	http://www.cise.ufl.edu/research/sparse/ufconfig/UFconfig-3.1.0.tar.gz
 # Explicitly specify amd version because of multiple amd packages:
 BuildRequires:	amd-devel = 2.2.0
 BuildRequires:	blas-devel
+BuildRequires:	suitesparse-common-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}
 
 %description
@@ -46,6 +47,8 @@ Group:		Development/C
 Requires:	%{libname} = %{epoch}:%{version}-%{release}
 Provides:	%{name}-devel = %{epoch}:%{version}-%{release}
 Requires:	blas-devel
+Requires:	amd-devel
+Requires:	suitesparse-common-devel
 Obsoletes:	%mklibname %{name} 4.6 -d
 Obsoletes:	%mklibname %{name} 5 -d
 Obsoletes:	%mklibname %{name} 5 -d -s
