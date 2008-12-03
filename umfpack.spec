@@ -1,23 +1,26 @@
-%define NAME UMFPACK
-%define major %{version}
-%define libname %mklibname %{name} %{major}
-%define develname %mklibname %{name} -d
+%define epoch		0
+
+%define name		umfpack
+%define NAME		UMFPACK
+%define version		5.2.0
+%define release		%mkrel 12
+%define major		%{version}
+%define libname		%mklibname %{name} %{major}
+%define develname	%mklibname %{name} -d
 
 Summary:	Routines for solving unsymmetric sparse linear systems
-Name:		umfpack
-Version:	5.2.0
-Release:	%mkrel 11
-Epoch:		0
+Name:		%{name}
+Version:	%{version}
+Release:	%{release}
+Epoch:		%{epoch}
 Group:		System/Libraries
 License:	GPLv2+
 URL:		http://www.cise.ufl.edu/research/sparse/umfpack/
 Source0:	http://www.cise.ufl.edu/research/sparse/umfpack/%{NAME}-%{version}.tar.gz
-Source1:	http://www.cise.ufl.edu/research/sparse/ufconfig/UFconfig-3.1.0.tar.gz
-# Explicitly specify amd version because of multiple amd packages:
-BuildRequires:	amd-devel = 2.2.0
-BuildRequires:	blas-devel
-BuildRequires:	suitesparse-common-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}
+BuildRequires:	amd-devel
+BuildRequires:	blas-devel
+BuildRequires:	suitesparse-common-devel >= 3.2.0-2
 
 %description
 UMFPACK provides a set of routines for solving unsymmetric sparse
@@ -29,8 +32,7 @@ syllables, "Umph Pack"; it is not "You Em Ef Pack".
 Summary:	Library of routines for solving unsymmetric sparse linear systems
 Group:		System/Libraries
 Provides:	%{libname} = %{epoch}:%{version}-%{release}
-# (tpg) kill suitesparse umfpack library
-Obsoletes:	%{mklibname umfpack 5}
+Obsoletes:	%mklibname %{name} 5
 
 %description -n %{libname}
 UMFPACK provides a set of routines for solving unsymmetric sparse
@@ -48,7 +50,7 @@ Requires:	%{libname} = %{epoch}:%{version}-%{release}
 Provides:	%{name}-devel = %{epoch}:%{version}-%{release}
 Requires:	blas-devel
 Requires:	amd-devel
-Requires:	suitesparse-common-devel
+Requires:	suitesparse-common-devel >= 3.0.0
 Obsoletes:	%mklibname %{name} 4.6 -d
 Obsoletes:	%mklibname %{name} 5 -d
 Obsoletes:	%mklibname %{name} 5 -d -s
@@ -64,12 +66,13 @@ use %{name}.
 
 %prep
 %setup -q -c 
-%setup -q -c -a 0 -a 1
-%setup -q -D -T -n %{name}-%{version}/%{NAME}
+%setup -q -D -n %{name}-%{version}/%{NAME}
+mkdir ../UFconfig
+ln -sf %{_includedir}/suitesparse/UFconfig.* ../UFconfig
 
 %build
 pushd Lib
-    %make -f GNUmakefile CC=%__cc CFLAGS="%{optflags} -fPIC -I/usr/include/suitesparse" INC=
+    %make -f GNUmakefile CC=%__cc CFLAGS="%{optflags} -fPIC -I%{_includedir}/suitesparse" INC=
     %__cc -shared -Wl,-soname,lib%{name}.so.%{major} -o lib%{name}.so.%{version} -lamd -lblas -lm *.o
 popd
 
