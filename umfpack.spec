@@ -3,7 +3,6 @@
 %define name		umfpack
 %define NAME		UMFPACK
 %define version		5.2.0
-%define release		%mkrel 12
 %define major		%{version}
 %define libname		%mklibname %{name} %{major}
 %define develname	%mklibname %{name} -d
@@ -11,16 +10,16 @@
 Summary:	Routines for solving unsymmetric sparse linear systems
 Name:		%{name}
 Version:	%{version}
-Release:	%{release}
+Release:	%mkrel 13
 Epoch:		%{epoch}
 Group:		System/Libraries
 License:	GPLv2+
 URL:		http://www.cise.ufl.edu/research/sparse/umfpack/
 Source0:	http://www.cise.ufl.edu/research/sparse/umfpack/%{NAME}-%{version}.tar.gz
-BuildRoot:	%{_tmppath}/%{name}-%{version}
 BuildRequires:	amd-devel
 BuildRequires:	blas-devel
 BuildRequires:	suitesparse-common-devel >= 3.2.0-2
+BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 %description
 UMFPACK provides a set of routines for solving unsymmetric sparse
@@ -32,6 +31,7 @@ syllables, "Umph Pack"; it is not "You Em Ef Pack".
 Summary:	Library of routines for solving unsymmetric sparse linear systems
 Group:		System/Libraries
 Provides:	%{libname} = %{epoch}:%{version}-%{release}
+Provides:	lib%{name} = %{epoch}:%{version}-%{release}
 Obsoletes:	%mklibname %{name} 5
 
 %description -n %{libname}
@@ -110,7 +110,7 @@ done
 
 %files -n %{libname}
 %defattr(-,root,root)
-%{_libdir}/libumfpack.so.%major
+%{_libdir}/libumfpack.so.%{major}
 
 %files -n %{develname}
 %defattr(-,root,root)
