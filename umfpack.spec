@@ -10,7 +10,7 @@
 Summary:	Routines for solving unsymmetric sparse linear systems
 Name:		%{name}
 Version:	%{version}
-Release:	%mkrel 13
+Release:	%mkrel 14
 Epoch:		%{epoch}
 Group:		System/Libraries
 License:	GPLv2+
