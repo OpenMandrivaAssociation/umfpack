@@ -2,7 +2,7 @@
 
 %define name		umfpack
 %define NAME		UMFPACK
-%define version		5.2.0
+%define version		5.4.0
 %define major		%{version}
 %define libname		%mklibname %{name} %{major}
 %define develname	%mklibname %{name} -d
@@ -10,7 +10,7 @@
 Summary:	Routines for solving unsymmetric sparse linear systems
 Name:		%{name}
 Version:	%{version}
-Release:	%mkrel 14
+Release:	%mkrel 1
 Epoch:		%{epoch}
 Group:		System/Libraries
 License:	GPLv2+
