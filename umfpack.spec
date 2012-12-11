@@ -1,25 +1,24 @@
-%define epoch		0
-
-%define name		umfpack
 %define NAME		UMFPACK
-%define version		5.4.0
 %define major		%{version}
 %define libname		%mklibname %{name} %{major}
 %define develname	%mklibname %{name} -d
 
 Summary:	Routines for solving unsymmetric sparse linear systems
-Name:		%{name}
-Version:	%{version}
-Release:	%mkrel 2
-Epoch:		%{epoch}
+Name:		umfpack
+Version:	5.6.1
+Release:	1
+Epoch:		1
 Group:		System/Libraries
 License:	GPLv2+
 URL:		http://www.cise.ufl.edu/research/sparse/umfpack/
 Source0:	http://www.cise.ufl.edu/research/sparse/umfpack/%{NAME}-%{version}.tar.gz
 BuildRequires:	amd-devel
+BuildRequires:	cholmod-devel
 BuildRequires:	blas-devel
-BuildRequires:	suitesparse-common-devel >= 3.2.0-2
-BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
+BuildRequires:	camd-devel
+BuildRequires:	colamd-devel
+BuildRequires:	ccolamd-devel
+BuildRequires:	suitesparse-common-devel >= 4.0.0
 
 %description
 UMFPACK provides a set of routines for solving unsymmetric sparse
@@ -30,9 +29,6 @@ syllables, "Umph Pack"; it is not "You Em Ef Pack".
 %package -n %{libname}
 Summary:	Library of routines for solving unsymmetric sparse linear systems
 Group:		System/Libraries
-Provides:	%{libname} = %{epoch}:%{version}-%{release}
-Provides:	lib%{name} = %{epoch}:%{version}-%{release}
-Obsoletes:	%mklibname %{name} 5
 
 %description -n %{libname}
 UMFPACK provides a set of routines for solving unsymmetric sparse
@@ -46,14 +42,11 @@ linked against %{NAME}.
 %package -n %{develname}
 Summary:	C routines for solving unsymmetric sparse linear systems
 Group:		Development/C
-Requires:	%{libname} = %{epoch}:%{version}-%{release}
-Provides:	%{name}-devel = %{epoch}:%{version}-%{release}
+Requires:	%{libname} = %{EVRD}
+Provides:	%{name}-devel = %{EVRD}
 Requires:	blas-devel
 Requires:	amd-devel
-Requires:	suitesparse-common-devel >= 3.0.0
-Obsoletes:	%mklibname %{name} 4.6 -d
-Obsoletes:	%mklibname %{name} 5 -d
-Obsoletes:	%mklibname %{name} 5 -d -s
+Requires:	suitesparse-common-devel >= 4.0.0
 
 %description -n %{develname}
 UMFPACK provides a set of routines for solving unsymmetric sparse
@@ -65,19 +58,21 @@ This package contains the files needed to develop applications which
 use %{name}.
 
 %prep
-%setup -q -c 
-%setup -q -D -n %{name}-%{version}/%{NAME}
-mkdir ../UFconfig
-ln -sf %{_includedir}/suitesparse/UFconfig.* ../UFconfig
+%setup -q -c -n %{name}-%{version}
+cd %{NAME}
+find . -perm 0640 | xargs chmod 0644
+mkdir ../SuiteSparse_config
+ln -sf %{_includedir}/suitesparse/SuiteSparse_config.* ../SuiteSparse_config
 
 %build
+cd %{NAME}
 pushd Lib
     %make -f GNUmakefile CC=%__cc CFLAGS="%{optflags} -fPIC -I%{_includedir}/suitesparse" INC=
-    %__cc -shared -Wl,-soname,lib%{name}.so.%{major} -o lib%{name}.so.%{version} -lamd -lblas -lm *.o
+    %__cc -shared -Wl,-soname,lib%{name}.so.%{major} -o lib%{name}.so.%{version} -lamd -lblas -lm -lcholmod -lcamd -lcolamd -lccolamd *.o
 popd
 
 %install
-%__rm -rf %{buildroot}
+cd %{NAME}
 
 %__install -d -m 755 %{buildroot}%{_libdir} 
 %__install -d -m 755 %{buildroot}%{_includedir}/suitesparse 
@@ -97,24 +92,12 @@ done
 %__install -d -m 755 %{buildroot}%{_docdir}/%{name}
 %__install -m 644 README.txt Doc/*.txt Doc/*.pdf Doc/ChangeLog Doc/License %{buildroot}%{_docdir}/%{name}
 
-%clean
-%__rm -rf %{buildroot}
-
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-
 %files -n %{libname}
-%defattr(-,root,root)
 %{_libdir}/libumfpack.so.%{major}
 
 %files -n %{develname}
-%defattr(-,root,root)
 %{_docdir}/%{name}
 %{_includedir}/*
 %{_libdir}/*.so
 %{_libdir}/*.a
+
