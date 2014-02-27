@@ -1,12 +1,12 @@
 %define NAME		UMFPACK
-%define major		%{version}
+%define major		5
 %define libname		%mklibname %{name} %{major}
 %define develname	%mklibname %{name} -d
 
 Summary:	Routines for solving unsymmetric sparse linear systems
 Name:		umfpack
 Version:	5.6.2
-Release:	1
+Release:	2
 Epoch:		1
 Group:		System/Libraries
 License:	GPLv2+
@@ -68,7 +68,7 @@ ln -sf %{_includedir}/suitesparse/SuiteSparse_config.* ../SuiteSparse_config
 cd %{NAME}
 pushd Lib
     %make -f GNUmakefile CC=%__cc CFLAGS="%{optflags} -fPIC -I%{_includedir}/suitesparse" INC=
-    %__cc -shared -Wl,-soname,lib%{name}.so.%{major} -o lib%{name}.so.%{version} -lamd -lblas -lm -lcholmod -lcamd -lcolamd -lccolamd *.o
+    %__cc -shared -Wl,-soname,lib%{name}.so.%{major} -o lib%{name}.so.%{major} -lamd -lblas -lm -lcholmod -lcamd -lcolamd -lccolamd *.o
 popd
 
 %install
