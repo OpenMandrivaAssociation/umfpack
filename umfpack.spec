@@ -6,7 +6,7 @@
 Summary:	Routines for solving unsymmetric sparse linear systems
 Name:		umfpack
 Version:	5.6.2
-Release:	2
+Release:	3
 Epoch:		1
 Group:		System/Libraries
 License:	GPLv2+
@@ -29,6 +29,8 @@ syllables, "Umph Pack"; it is not "You Em Ef Pack".
 %package -n %{libname}
 Summary:	Library of routines for solving unsymmetric sparse linear systems
 Group:		System/Libraries
+%define	oldname	%{mklibname %{name} 5.6.2}
+%rename		%{oldname}
 
 %description -n %{libname}
 UMFPACK provides a set of routines for solving unsymmetric sparse
