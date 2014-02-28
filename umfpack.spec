@@ -68,7 +68,7 @@ ln -sf %{_includedir}/suitesparse/SuiteSparse_config.* ../SuiteSparse_config
 cd %{NAME}
 pushd Lib
     %make -f GNUmakefile CC=gcc CFLAGS="%{optflags} -fPIC -I%{_includedir}/suitesparse" INC=
-    gcc -shared -Wl,-soname,lib%{name}.so.%{major} -o lib%{name}.so.%{major} -lamd -lblas -lm -lcholmod -lcamd -lcolamd -lccolamd *.o
+    gcc %{ldflags} -shared -Wl,-soname,lib%{name}.so.%{major} -o lib%{name}.so.%{major} -lamd -lblas -lm -lcholmod -lcamd -lcolamd -lccolamd *.o
 popd
 
 %install
