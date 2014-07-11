@@ -6,7 +6,7 @@
 Summary:	Routines for solving unsymmetric sparse linear systems
 Name:		umfpack
 Version:	5.6.2
-Release:	5
+Release:	6
 Epoch:		1
 Group:		System/Libraries
 License:	GPLv2+
