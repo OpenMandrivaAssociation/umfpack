@@ -10,7 +10,7 @@ Release:	9
 Epoch:		1
 Group:		System/Libraries
 License:	GPLv2+
-URL:		http://www.cise.ufl.edu/research/sparse/umfpack/
+URL:		https://www.cise.ufl.edu/research/sparse/umfpack/
 Source0:	http://www.cise.ufl.edu/research/sparse/umfpack/%{NAME}-%{version}.tar.gz
 BuildRequires:	amd-devel
 BuildRequires:	cholmod-devel
